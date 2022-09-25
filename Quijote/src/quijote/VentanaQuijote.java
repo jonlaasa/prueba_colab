@@ -35,23 +35,82 @@ public class VentanaQuijote extends JFrame {
 		bPagArriba.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				muevePagina( -(spTexto.getHeight()-20) );
+				muevePagina( -(spTexto.getHeight()-20), true );
 			}
 		});
 		bPagAbajo.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				muevePagina( (spTexto.getHeight()-20) );
+				muevePagina( (spTexto.getHeight()-20), false );
 			}
 		});
 	}
 	
-	private void muevePagina( int pixelsVertical ) {
+	
+	
+	
+	
+	private void muevePagina( int pixelsVertical, boolean arriba ) {
 		// TODO Cambiar este comportamiento de acuerdo a los comentarios de la cabecera de clase
 		JScrollBar bVertical = spTexto.getVerticalScrollBar();
 		System.out.println( "Moviendo texto de " + bVertical.getValue() + " a " + (bVertical.getValue()+pixelsVertical) );
 		bVertical.setValue( bVertical.getValue() + pixelsVertical );
+		int cuanto=pixelsVertical/20;
+		int posActual=bVertical.getValue();	
+		if (arriba==false) {
+			Thread t =new Thread() {
+				public void run () {
+						for(int i=posActual;bVertical.getValue()<posActual+pixelsVertical;i++) {
+							bVertical.setValue( bVertical.getValue() + cuanto );
+							try {
+								Thread.sleep(50);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					
+						}
+			
+			};
+			
+		};
+		
+		t.start();
 	}
+	else {
+			Thread p =new Thread() {
+				public void run () {
+						for(int i=posActual;bVertical.getValue()>posActual+pixelsVertical;i++) {
+							bVertical.setValue( bVertical.getValue() + cuanto );
+							try {
+								Thread.sleep(50);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						
+					
+					
+				}
+				
+
+			
+			};
+
+		};p.start();
+	}
+	
+}
+		
+		
+		
+		
+		
+		
+	
+	
+	
+	
 	
 	private void cargaQuijote() {
 		try {
